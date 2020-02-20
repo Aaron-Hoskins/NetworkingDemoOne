@@ -1,0 +1,93 @@
+- Networking and Android
+    - Network calls from main thread are NOT allowed!!!
+    - ALL INTERNET APPS MUST USE THE INTERNET SYSTEM PERMISSION
+    - Generally, we use the network to request data from online sources
+        or to send data to an online source
+           - This act is generally referred to as "Consuming API Calls"
+   - In Android we have a few common libraries to achieve Network calls
+        - JAVA Native
+            -HttpUrlConnection
+                - First must instantiate the URL object
+                - Then open a HttpUrlConnection using the URL object
+                - Buffer through the result from connection
+                - Close connection
+                - You MUST define a threading scheme
+        - Third Party Libs.
+            - Retrofit
+                - Uses a OkHttp3 client
+                - Uses interfaces with Call object returns
+                - Interface are annotated with the proper Http Verb that interface is for
+                - Has built in (from okhttp3) Sync and Async capabilities
+                    - Sync function = execute()
+                    - Async function = enqueue()
+                - Uses a Converter factory to convert results to objects
+                - Uses a Call Factory adapter to interact with SOME threading schemes more seamlessly
+                    - RxJava
+                    - Coruitines
+                - Most commonly used when third parties are allowed
+            - Okhttp (current version = 3 , OkHttp3)
+            - Has built in Sync and Async capabilities
+                 - Sync function = execute()
+                 - Async function = enqueue()
+            - Volley
+                - a httpurlconnention client
+        - Not used alot
+            - Spring Boot
+    - REST vs SOAP
+        - SOAP
+            - older
+            - only returns xmls
+            - protocol based
+            - SLOWER
+            - kSoap was the common lib used for SOAP in android
+        - REST
+            - newer
+            - Returns many formats
+            - FASTER
+    - JSON
+        - Most returns nowadays are using JSON formats for results
+        - JAVA SCRIPT OBJECT NOTATION
+        {
+        "results":[
+            {
+                "gender":"female",
+                "name":
+                    {
+                        "title":"Ms",
+                        "first":"Iida",
+                        "last":"Pulkkinen"
+                    },
+                "location":
+                    {
+                        "street":
+                            {
+                                "number":7331,
+                                "name":"Hämeenkatu"
+                            },
+                        "city":"Oulunsalo",
+                        "state":"Tavastia Proper",
+                        "country":"Finland",
+                        "postcode":65316,
+                        "coordinates":
+                            {
+                                "latitude":"-5.5886","longitude":"170.4483"},"timezone":{"offset":"-3:30","description":"Newfoundland"}},"email":"iida.pulkkinen@example.com","login":{"uuid":"5ba5b39d-9766-4850-b5de-84cde297be99","username":"tinyleopard333","password":"site","salt":"BxyGvcCw","md5":"3270b6414d864fae182e890015f9ccc1","sha1":"d780020eaa919a955c26f791321a82f6991e488b","sha256":"5e337138d331e0ee623ce468f34f27ecf45f0b9206b9a690c49568fa893792bc"},"dob":{"date":"1985-11-20T10:34:04.393Z","age":35},"registered":{"date":"2017-05-31T15:57:05.745Z","age":3},"phone":"03-547-956","cell":"045-676-15-09","id":{"name":"HETU","value":"NaNNA370undefined"},"picture":{"large":"https://randomuser.me/api/portraits/women/84.jpg","medium":"https://randomuser.me/api/portraits/med/women/84.jpg","thumbnail":"https://randomuser.me/api/portraits/thumb/women/84.jpg"},"nat":"FI"}],"info":{"seed":"f1188fb3aeab7dd7","results":1,"page":1,"version":"1.3"}}
+
+        - Parse responses formatted into a Json into Objects (POJO or Data class)
+            - 2 Methods
+                - Java Native
+                    - JSON PARSER
+                - Google Way
+                    - GSON
+                        - Google JSON Parser
+- Image Processing
+    - There are 2 major 3rd party libs used for image processing
+        - Glide
+            - Caches resized images from web resources
+            - Has more functionality built in
+            - Slower on initial load of image, but faster from cache
+            - Heavy Weight Lib (uses a lot of memory and methods)
+        - Picasso
+            - Caches the RAW image
+            - Less functionality
+            - Faster on initial load  of image, but slower on cached
+            - Light Weight Lib
