@@ -21,6 +21,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -36,8 +40,14 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     //OkHttp
     implementation("com.squareup.okhttp3:okhttp:4.4.0")
+    //Okhttp Logging Interceptor
+    implementation("com.squareup.okhttp3:logging-interceptor:4.4.0")
     //Event Bus
     implementation 'org.greenrobot:eventbus:3.2.0'
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
+    //Retrofit GSON Converter Factory
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

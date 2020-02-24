@@ -91,3 +91,35 @@
             - Less functionality
             - Faster on initial load  of image, but slower on cached
             - Light Weight Lib
+
+
+-RxJava/RxAndroid
+    - Reactive Programming schema for Java and android apps
+    - RxJava uses the Observer/ Subscriber pattern
+    - 4 Main Parts
+        - Observables
+            - This are the task you want to observe for changes in state
+        - Observers
+            - This are the parties looking for observable changes
+        - Schedulers
+            - This are the "threads" that will either perform the task(s) or the thread that will\
+                be used to report the task to
+        - Emitters
+            - Pipeline that the results or information about state is transmitted on
+    - Types of observables
+        - Standard
+            - 1 to n emissions NO BACK-PRESSURE CONTROL
+        - Flowable
+            - 1 to n emissions WITH BACK_PRESSURE CONTROL
+        - Single
+            - Only 1 emission
+        - Completable
+            - Only tell if the operations being done is completed (Boolean t/f)
+        - Maybe
+            - 0 to 1 Emissions
+    - Schedulers
+        - Dictates which thread will do either the observation or is going to be observed
+            - Schedulers.io() <--- RxJava
+                - worker Thread
+            -AndroidSchedulers.mainThread() <--- RxAndroid
+                - main thread

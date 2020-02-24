@@ -1,16 +1,30 @@
 package com.examples.coding.networkingdemoone.datasource.remote.okhttp
 
 import android.util.Log
+import com.examples.coding.networkingdemoone.datasource.remote.chuckNorrisJokesURL
+import com.examples.coding.networkingdemoone.datasource.remote.randomUserFullURL
+import com.examples.coding.networkingdemoone.model.ChuckNorrisResponse.JokeResponse
 import com.examples.coding.networkingdemoone.model.User.UserResponce
 import com.google.gson.Gson
 import okhttp3.*
+import okhttp3.logging.HttpLoggingInterceptor
 import org.greenrobot.eventbus.EventBus
+import java.io.File
 import java.io.IOException
+import java.lang.Exception
+import java.util.concurrent.TimeUnit
 
-class OkHttpHelper {
+class OkHttpHelper(val cacheFile : File) {
 
-    private fun getClient() : OkHttpClient{
-        val okHttpClient = OkHttpClient.Builder().build()
+     fun getClient() : OkHttpClient{
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+         val cache = Cache(cacheFile, (1028*10*10))
+        val okHttpClient = OkHttpClient
+            .Builder()
+            .addInterceptor(interceptor)
+            .cache(cache)
+            .build()
         return okHttpClient
     }
 
@@ -18,18 +32,39 @@ class OkHttpHelper {
         val request = Request.Builder().url(url).build()
         getClient().newCall(request).enqueue(object : Callback{
             override fun onResponse(call: Call, response: Response) {
-                val json = response.body?.string()
-                val userResults = Gson().fromJson<UserResponce>(json, UserResponce::class.java)
-                EventBus.getDefault().post(userResults)
+                try{
+                if(url.equals(randomUserFullURL)){
+                    val json = response.body?.string()
+                    val userResults = Gson().fromJson<UserResponce>(json, UserResponce::class.java)
+                    EventBus.getDefault().post(userResults)
+                } else {
+                    val json = response.body?.string()
+                    val jokeResponse = Gson().fromJson<JokeResponse>(json, JokeResponse::class.java)
+                    EventBus.getDefault().post(jokeResponse)
+                } }catch (e : Exception) {
+                    makeSyncApiCall(chuckNorrisJokesURL)
+
+                }
+
             }
 
             override fun onFailure(call: Call, e: IOException) {
+                makeSyncApiCall(chuckNorrisJokesURL)
                 Log.e("ERROR_TAG", "Error in makeAsyncApiCall ---->" ,e)
+
             }
         })
     }
 
     fun makeSyncApiCall(url : String) : String{
-        return ""
+        val request = Request
+            .Builder()
+            .url(url)
+            .cacheControl(CacheControl.Builder().maxAge(30, TimeUnit.SECONDS).build())
+            .build()
+        val response = getClient().newCall(request).execute()
+        val json = response.body!!.string()
+        Log.d("TAG", json)
+        return json
     }
 }
